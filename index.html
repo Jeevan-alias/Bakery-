@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Bakery</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero__content">
+        <h1>Happy Bakery </h1>
+        <p>
+          Freshly baked breads, cakes, and pastries made with love every day.
+        </p>
+        <button id="manage-menu-btn" class="btn primary">
+          Manage Menu
+        </button>
+        <button id="view-sales-btn" class="btn ghost">
+          View Sales Report
+        </button>
+      </div>
+      <div class="hero__art">
+        <img
+          src="https://images.pexels.com/photos/1082343/pexels-photo-1082343.jpeg?auto=compress&cs=tinysrgb&w=900"
+          alt="Fresh bakery assortment"
+        />
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="menu">
+        <div class="menu__header">
+          <h2>Menu</h2>
+          <div class="menu__search">
+            <input
+              id="menu-search"
+              type="search"
+              placeholder="Search pastries, breads..."
+              aria-label="Search menu items"
+            />
+          </div>
+        </div>
+        <div id="menu-grid" class="menu__grid">
+          <!-- Menu cards populated by JS -->
+        </div>
+      </section>
+
+      <aside class="billing">
+        <div class="billing__header">
+          <h2>Cart &amp; Billing</h2>
+        </div>
+        <section class="billing__items">
+          <ul id="cart-items">
+            <!-- Cart items populated by JS -->
+          </ul>
+          <div class="billing__empty" id="cart-empty-state">
+            Cart is empty. Tap a menu item to add here.
+          </div>
+        </section>
+
+        <section class="billing__summary">
+          <div class="summary__row">
+            <span>Subtotal</span>
+            <span id="subtotal-amount">₹0.00</span>
+          </div>
+          <div class="summary__row">
+            <span>Tax</span>
+            <span id="tax-amount">₹0.00</span>
+          </div>
+          <div class="summary__row summary__row--total">
+            <span>Total</span>
+            <span id="total-amount">₹0.00</span>
+          </div>
+        </section>
+
+        <section class="billing__actions">
+          <button id="pay-now-btn" class="btn primary">Pay Now</button>
+          <button id="print-bill-btn" class="btn secondary">Print Bill</button>
+          <button id="clear-cart-btn" class="btn ghost">Clear Cart</button>
+        </section>
+      </aside>
+    </main>
+
+    <!-- Manage Menu Modal -->
+    <dialog id="menu-modal" class="modal">
+      <form method="dialog" class="modal__dialog">
+        <header class="modal__header">
+          <h3>Manage Menu</h3>
+          <button type="button" class="modal__close" data-close-modal>&times;</button>
+        </header>
+        <section class="modal__body">
+          <div class="modal__columns">
+            <div class="modal__form">
+              <label>
+                Item Name
+                <input id="menu-item-name" type="text" required />
+              </label>
+              <label>
+                Price (₹)
+                <input id="menu-item-price" type="number" min="0" step="0.01" required />
+              </label>
+              <label>
+                Category
+                <input id="menu-item-category" type="text" placeholder="Cake, Bread, etc." />
+              </label>
+              <label>
+                Image URL
+                <input id="menu-item-image" type="url" placeholder="https://example.com/image.jpg" />
+              </label>
+              <div class="modal__actions">
+                <button id="save-menu-item-btn" type="submit" class="btn primary">
+                  Save Item
+                </button>
+                <button id="reset-menu-form-btn" type="reset" class="btn ghost">
+                  Reset
+                </button>
+              </div>
+            </div>
+            <div class="modal__list">
+              <h4>Current Items</h4>
+              <ul id="menu-items-list">
+                <!-- Existing menu items populate here -->
+              </ul>
+            </div>
+          </div>
+        </section>
+      </form>
+    </dialog>
+
+    <!-- Sales Report Modal -->
+    <dialog id="sales-modal" class="modal">
+      <form method="dialog" class="modal__dialog">
+        <header class="modal__header">
+          <h3>Sales Report</h3>
+          <button type="button" class="modal__close" data-close-modal>&times;</button>
+        </header>
+        <section class="modal__body">
+          <div class="sales__summary">
+            <div class="summary-card">
+              <span class="summary-card__label">Total Orders</span>
+              <span id="total-orders" class="summary-card__value">0</span>
+            </div>
+            <div class="summary-card">
+              <span class="summary-card__label">Total Revenue</span>
+              <span id="total-revenue" class="summary-card__value">₹0.00</span>
+            </div>
+            <div class="summary-card">
+              <span class="summary-card__label">Average Ticket</span>
+              <span id="average-ticket" class="summary-card__value">₹0.00</span>
+            </div>
+          </div>
+          <div class="sales__actions">
+            <button id="export-sales-btn" type="button" class="btn secondary">
+              Export CSV
+            </button>
+            <button id="clear-sales-btn" type="button" class="btn ghost">
+              Clear Sales History
+            </button>
+          </div>
+          <div class="sales__table-wrapper">
+            <table id="sales-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Date</th>
+                  <th>Items</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Sales entries populated here -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </form>
+    </dialog>
+
+    <!-- QR Code Modal -->
+    <dialog id="payment-modal" class="modal">
+      <form method="dialog" class="modal__dialog modal__dialog--small">
+        <header class="modal__header">
+          <h3>Scan &amp; Pay</h3>
+          <button type="button" class="modal__close" data-close-modal>&times;</button>
+        </header>
+        <section class="modal__body">
+          <div class="qr-wrapper">
+            <img
+              id="payment-qr"
+              src="https://api.qrserver.com/v1/create-qr-code/?size=240x240&data=upi://pay?pa=jeevanr5678r@okhdfcbank&pn=Jeevan%20Raj"
+              alt="UPI payment QR code"
+            />
+            <p class="qr-wrapper__caption">
+              Show this code to the customer for UPI payments.
+            </p>
+          </div>
+        </section>
+      </form>
+    </dialog>
+
+    <script src="app.js"></script>
+  </body>
+</html>
